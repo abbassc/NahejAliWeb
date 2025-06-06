@@ -45,4 +45,29 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+
+
+
+    
+
+    public function donor()
+    {
+        return $this->hasOne(Donor::class, 'id'); // User.id = Donor.id
+    }
+
+    public function volunteer()
+    {
+        return $this->hasOne(Volunteer::class, 'id'); // User.id = Volunteer.id
+    }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'id'); // User.id = Admin.id
+    }
+
+
+
+
 }
