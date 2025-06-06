@@ -15,21 +15,28 @@
 <body>
     <header>
         <h1> Login </h1>
+        <nav>
+            <ul>
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><a href="{{ route('register') }}">Register</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main class=''>
         
         <div  style="width:400px;">
-            <form action="#">
+            <form action="{{ route('login') }}" method="POST">
+              @csrf
                 <div>
                     <label for="email"> Email: </label>
-                    <input id="email" type="email" placeholder="Enter your email" required>
+                    <input id="email" name="email" type="email" placeholder="Enter your email" required>
                 </div>
 
                 <br>
                 <div>
                     <label for="password"> Password: </label>
-                    <input id="password" type="password" placeholder="Enter your password" required>
+                    <input id="password" name="password" type="password" placeholder="Enter your password" required>
                 </div>
 
                 <br>
@@ -39,7 +46,7 @@
             </form>
 
             <p>Forgot password? <a href="#forgot-pass">Reset password</a></p>
-            <p>Don't have an account? <a href="register.html">Sign up</a></p>
+            <p>Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
         </div>
 
         <section id="forgot-pass" style="display: block;">

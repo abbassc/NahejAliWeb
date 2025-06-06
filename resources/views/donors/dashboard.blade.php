@@ -35,6 +35,7 @@
 
       <form action="{{ route('donor.donations.store') }}" method="POST">
         @csrf
+        @method('POST')
         <label>Donation Type:</label>
         <select name="type" required>
           <option value="">-- Select --</option>
@@ -44,19 +45,19 @@
         </select>
 
         <label>Amount:</label>
-        <input type="text" placeholder="Enter amount" >
+        <input name="amount" type="text" placeholder="Enter amount" >
 
         <label>Description:</label>
-        <input type="text" placeholder="Enter description" >
+        <input name="description" type="text" placeholder="Enter description" >
 
         <label>Location:</label>
-        <input type="text" placeholder="Enter your location" required>
+        <input name="location" type="text" placeholder="Enter your location" required>
 
         <label>Date:</label>
-        <input type="date" placeholder="Enter the date" required>
+        <input id="date" name="date" type="date" placeholder="Enter the date" required>
 
         <label>Time:</label>
-        <input type="text" placeholder="Enter the prefered time" required>
+        <input name="time" type="text" placeholder="Enter the prefered time" required>
 
         <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button>
       </form>
@@ -70,13 +71,12 @@
 
       <h3>Past Donations</h3>
       <ul>
-        <li>Money - $100 - March 2025</li>
-        <li>Food - 20 kg of Rice - February 2025</li>
+        @foreach($donations as $donation)
+          <li>{{ $donation->type }} - {{ $donation->amount }} - {{ $donation->date }} - {{ ucfirst($donation->status) }}</li>
+        @endforeach
       </ul>
       <table>
         <tr><th>Type</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr>
-        <tr><td>Money</td><td>$100</td><td>Mar 2025</td></tr>
-        <tr><td>Food</td><td>20kg Rice</td><td>Feb 2025</td></tr>
         @foreach($donations as $donation)
           <tr>
             <td>{{ $donation->type }}</td>
@@ -84,7 +84,7 @@
             <td>{{ $donation->date }}</td>
             <td>{{ ucfirst($donation->status) }}</td>
             <td>
-              <button type="button" onclick="openUpdateModal('{{ $donation->id }}',)">Update</button>
+              <button type="button" onclick="openUpdateModal('{{ $donation->id }}')">Update</button>
               <form action="{{ route('donor.donations.cancel', $donation->id)}}" method="POST" style="display:inline;">
                 @csrf
                 @method('DELETE')
@@ -95,23 +95,110 @@
         @endforeach
       </table>
     </section>
+
+    <!-- EDITTTTTTTTTTTTTTT-->
+    <section id="update-modal" style="display:none;">
+      <h3>Update Donation</h3>
+      <form id="update-donation-form" action="{{ route('donor.donations.update') }}" method="POST">
+        @csrf
+        @method('PUT')
+
+        <input type="hidden" name="donation_id" id="donation_id" />
+
+        <label>Donation Type:</label>
+        <select name="type" id="type_update" required>
+          <option value="">-- Select --</option>
+          <option value="money">Money</option>
+          <option value="food">Food</option>
+          <option value="clothes">Clothes</option>
+        </select>
+
+        <label>Amount:</label>
+        <input name="amount" id="amount_update" type="text" placeholder="Enter amount" >
+
+        <label>Description:</label>
+        <input name="description" id="description_update" type="text" placeholder="Enter description" >
+
+        <label>Location:</label>
+        <input name="location" id="location_update" type="text" placeholder="Enter your location" required>
+
+        <label>Date:</label>
+        <input name="date" id="date_update" type="date" placeholder="Enter the date" required>
+
+        <label>Time:</label>
+        <input name="time" id="time_update" type="text" placeholder="Enter the preferred time" required>
+
+        <button type="submit" onclick="showUpdateConfirmation()">Update Donation</button>
+        <button type="button" onclick="closeUpdateModal()">Cancel</button>
+      </form>
+    </section>
+
   </main>
 
   <script>
-    function showDonationConfirmation() {    }
+    function showDonationConfirmation() {  
+      let date = document.getElementById("date").value;
 
-    function showDeleteConfirmation(){    }
+      if (date) {
+          alert(`Donation added on ${date}!`);
+      }
+      else {
+          alert("Please select all required values.");
+      }
+    }
 
-    function openUpdateModal(donationId){}
+    function showDeleteConfirmation(){  
+      alert("Your donation has been deleted.");
+    }
+
+    function showUpdateConfirmation() {
+      alert("Your donation has been updated.");
+    }
+
+    
+
+    const donationsData = {
+      @foreach($donations as $donation)
+        {{ $donation->id }} : {
+          type: '{{ $donation->type }}',
+          amount: '{{ $donation->amount }}',
+          description: '{{ $donation->description }}',
+          location: '{{ $donation->location }}',
+          date: '{{ $donation->date }}',
+          time: '{{ $donation->time }}'
+        },
+      @endforeach
+    };
+
+    function openUpdateModal(donationId){
+      closeRemaining();
+      closeAddNewDonation();
+      const donation = donationsData[donationId];
+      if(!donation) return alert('Donation data not found');
+
+      document.getElementById("update-modal").style.display = "block";
+
+      document.getElementById("donation_id").value = donationId;
+      document.getElementById("type_update").value = donation.type;
+      document.getElementById("amount_update").value = donation.amount;
+      document.getElementById("description_update").value = donation.description;
+      document.getElementById("location_update").value = donation.location;
+      document.getElementById("date_update").value = donation.date;
+      document.getElementById("time_update").value = donation.time;
+    }
+    function closeUpdateModal() {
+      document.getElementById("update-modal").style.display = "none";
+    }
 
     function closeRemaining(){
       document.getElementById("remaining").style.display = "none";
       document.getElementById("remaining-2").style.display = "none";
+      closeUpdateModal();
     }
 
     function closeAddNewDonation(){
       document.getElementById("new-donation").style.display = "none";
-      openRemainig();
+      openRemaining();
     }
 
     function openAddNewDonation(){

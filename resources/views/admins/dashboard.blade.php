@@ -1,4 +1,3 @@
-@extends('layouts.app')
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,13 +6,14 @@
   <title>Admin Page</title>
   <link rel="stylesheet" href="{{asset('../css/styles.css')}}">
   <script src="{{ asset('js/script.js') }}"></script>
-  </head>
+</head>
+
 <body>
   <header>
     <h1>Admin Page</h1>
     <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
+      <ul type="disc">
+        <li><a href="{{ route('home') }}">Home</a></li>
         <li><a href="#dashboard">Dashboard</a></li>
         <li><a href="#panel">Panel</a></li>
         <li><a href="#families">Families</a></li>

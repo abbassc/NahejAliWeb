@@ -9,6 +9,12 @@
 <body>
     <header>
         <h1> Register </h1>
+        <nav>
+            <ul>
+                <li><a href="{{ route('home') }}">Home</a></li>
+                <li><a href="{{ route('login') }}">Login</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
@@ -17,34 +23,35 @@
 
         <div style="width:400px; display: none;" id="register-as-donor" class="signup-container" >
             <h2>Register as Donor</h2>
-            <form action="register-donor.php" method="POST">
+            <form action="{{ route('register') }}" method="POST">
+                @csrf
                 <div>
                     <label for="name"> Name: </label>
-                    <input type="text" id="name" placeholder="Enter your name" required>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" required>
                 </div>
 
                 <br>
                 <div>
                     <label for="email"> Email: </label>
-                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 </div>
 
                 <br>
                 <div>
                     <label for="phone"> Phone: </label>
-                    <input type="number" id="phone" placeholder="Enter your phone number" required>
+                    <input type="number" id="phone" name="phone" placeholder="Enter your phone number" required>
                 </div>
 
                 <br>
                 <div>
                     <label for="location"> Location: </label>
-                    <input type="text" id="location" placeholder="Enter your location" required>
+                    <input type="text" id="location" name="location" placeholder="Enter your location" required>
                 </div>
 
                 <br>
                 <div>
                     <label for="password"> Password: </label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
 
                 <br>
@@ -53,26 +60,27 @@
                 <button type="submit">Register</button>
                 <button type="reset">Reset</button>
             </form>
-            <p>Already have an account? <a href="login.html">Login here</a></p>
+            <p>Already have an account? <a href="{{ route('login') }}">Login here</a></p>
         </div>
 
         <section class="form-container" style="display: none;" id="register-as-volunteer">
         <h2>Register as Volunteer</h2>
         <form>
+            @csrf
             <label for="name" style="font-weight: bold;">Full Name:</label>
-            <input id="name" type="text" placeholder="Full Name" required>
+            <input id="name" name="name" type="text" placeholder="Full Name" required>
             <br>
 
             <label for="phone" style="font-weight: bold;">Phone Number:</label>
-            <input id="phone" type="number" placeholder="Phone" required>
+            <input id="phone" name="phone" type="number" placeholder="Phone" required>
             <br>
 
             <label for="email"> Email: </label>
-            <input type="email" id="email" placeholder="Enter your email" required>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
             <br>            
 
             <label for="location" style="font-weight: bold;">Location:</label>
-            <input id="location" type="text" placeholder="Enter your location" required>
+            <input id="location" name="location" type="text" placeholder="Enter your location" required>
             <br>
 
             <label for="availabilty" style="font-weight: bold;">Select your availabilty</label>
@@ -86,9 +94,10 @@
             <br>
 
             <label for="message" style="font-weight: bold;">Volunteer message:</label>
-            <textarea id="message" placeholder="Why do you want to volunteer?" rows="4"></textarea>
+            <textarea id="message" name="message" placeholder="Why do you want to volunteer?" rows="4"></textarea>
 
             <button type="submit">Register</button>
+            <button type="reset" class="reset-button">Reset</button>
         </form>
     </section>
     </main>

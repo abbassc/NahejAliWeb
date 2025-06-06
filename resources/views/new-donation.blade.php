@@ -11,9 +11,9 @@
     <h1>Make a Donation</h1>
     <nav>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="login.html">Login</a></li>
+        <li><a href="{{ route('home') }}">Home</a></li>
+        <li><a href="{{ route('register') }}">Register</a></li>
+        <li><a href="{{ route('login') }}">Login</a></li>
       </ul>
     </nav>
   </header>
@@ -22,34 +22,35 @@
       <h2>Donate Now</h2>
 
       <form>
+        @csrf
         <label>Name:</label>
-        <input type="text" placeholder="Enter your family name" required>
+        <input name="name" type="text" placeholder="Enter your family name" required>
 
         <label>Phone:</label>
-        <input type="text" placeholder="Enter your phone number" required>
+        <input name="phone" type="text" placeholder="Enter your phone number" required>
 
         <label>Donation Type:</label>
-        <select required>
+        <select name="type" required>
           <option value="">-- Select --</option>
           <option value="money">Money</option>
           <option value="food">Food</option>
           <option value="clothes">Clothes</option>
         </select>
 
-        <label>Amount / Description:</label>
-        <input type="text" placeholder="Enter amount or description" required>
+        <label>Amount:</label>
+        <input name="amount" type="text" placeholder="Enter amount" required>
 
-        <label>Occasion:</label>
-        <input type="text" placeholder="Enter occasion title">
+        <label>Descriptions:</label>
+        <input name="description" type="text" placeholder="Enter description">
 
         <label>Location:</label>
-        <input type="text" placeholder="Enter your location" required>
+        <input name="location" type="text" placeholder="Enter your location" required>
 
         <label>Date:</label>
-        <input type="date" placeholder="Enter the date" required>
+        <input name="date" type="date" placeholder="Enter the date" required>
 
         <label>Time:</label>
-        <input type="text" placeholder="Enter the prefered time" required>
+        <input name="time" type="text" placeholder="Enter the prefered time" required>
 
         <button type="submit" onclick="">Submit Donation</button>
       </form>

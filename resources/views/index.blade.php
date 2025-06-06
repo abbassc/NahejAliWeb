@@ -14,9 +14,9 @@
 
         <nav>
             <ul type="disc">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="#about">About</a></li>
-                <li><a href="login.html">Login</a></li>
+                <li><a href="{{ route('login') }}">Login</a></li>
             </ul>
         </nav>
     </header>
@@ -28,8 +28,8 @@
             <p>Supporting families in need across Lebanon. Join us in our mission of giving and hope.</p>
             <p>• .مبادرة شبابية لتأمين الافطارات اليومية من طعامكم للعائلات المتعففة في شهر رمضان المبارك
                 <br>ما تراه قليل؛ قد يعني الكثير <br><br></p>
-            <a class="btn" href="new-donation.html">Make a Donation</a>
-            <a class="btn" href="register.html">Join Our Family!</a>
+            <a class="btn" href="{{ route('donations.create') }}">Make a Donation</a>
+            <a class="btn" href="{{ route('register') }}">Join Our Family!</a>
             <br><br>
         </section>
 
