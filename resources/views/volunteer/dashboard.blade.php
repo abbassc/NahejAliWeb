@@ -63,7 +63,7 @@
                 <td>{{ $donation->status }}</td>
                 <td>
                   @if($donation->status === 'assigned')
-                    <form action="{{ route('volunteer.donations.complete', $donation->id) }}" method="POST">
+                    <form action="{{ route('volunteer.donations.collect', $donation->id) }}" method="POST">
                       @csrf
                       <button type="submit" class="btn">Complete</button>
                     </form>
