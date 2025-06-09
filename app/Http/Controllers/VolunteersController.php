@@ -15,8 +15,8 @@ class VolunteersController extends Controller
         $donations = Auth::user()->volunteer->donations()->get();
 
         $availableDonations = Donation::where('status', 'pending')->get();
-        $tasksDonations = Donation::where('volunteer_id', Auth::user()->volunteer->id)->where('status', 'assigned')->get();
-        $completedDonations = Donation::where('volunteer_id', Auth::user()->volunteer->id)->where('status', 'collected')->get();
+        $tasksDonations = Donation::where('volunteer_id', Auth::user()->volunteer->user_id)->where('status', 'assigned')->get();
+        $completedDonations = Donation::where('volunteer_id', Auth::user()->volunteer->user_id)->where('status', 'collected')->get();
 
         return view('volunteer.dashboard', compact('donations', 'availableDonations', 'tasksDonations', 'completedDonations'));
     }
@@ -34,10 +34,7 @@ class VolunteersController extends Controller
             return redirect()->back()->with('error', 'Donation already collected.');
         }
 
-        // $donation->update(['status' => 'assigned']);
-        // $donation->update(['volunteer_id' => Auth::user()->volunteer->id]);
-        $donation->update(['status' => 'assigned', 'volunteer_id' => Auth::user()->volunteer->id,]);
-
+        $donation->update(['status' => 'assigned', 'volunteer_id' => Auth::user()->volunteer->user_id]);
 
         return redirect()->route('volunteer.dashboard')->with('success', 'Donation reserved.');
     }
@@ -46,7 +43,7 @@ class VolunteersController extends Controller
     // Collect donation
     public function collectDonation($donation_id)
     {
-        $donation = Donation::where('id', $donation_id)->where('volunteer_id', Auth::user()->volunteer->id)->firstOrFail();
+        $donation = Donation::where('id', $donation_id)->where('volunteer_id', Auth::user()->volunteer->user_id)->firstOrFail();
 
         if ($donation->status !== 'assigned') {
             return redirect()->back()->with('error', 'Donation is not assigned yet.');

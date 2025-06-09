@@ -16,31 +16,30 @@ class DonationsController extends Controller
     // Store new donation
     public function storeDonation(Request $request)
     {
-
-
-
-
         $request->validate([
-        'date' => 'required|date',
+            'date' => 'required|date',
+            'prefered_time' => 'required|date',
+            'location' => 'required|string',
+            'phone' => 'required|string',
+            'title' => 'required|string',
+            'category' => 'required|string',
+            'amount' => 'required|numeric',
+            'description' => 'required|string',
         ]);
 
-
-
-
-        Donation::create([
-            
+        $donation = Donation::create([
             'title' => $request->title,
-            'description' => $request->description,
-            'amount' => $request->amount,
             'category' => $request->category,
-            'date' => $request->date,
-            'prefered_time' => $request->prefered_time,
+            'amount' => $request->amount,
+            'description' => $request->description,
             'location' => $request->location,
             'phone' => $request->phone,
+            'date' => $request->date,
+            'prefered_time' => $request->prefered_time,
             'status' => 'pending',
         ]);
 
-        return redirect()->route('donor.dashboard')->with('success', 'Donation created.');
+        return redirect()->route('home')->with('success', 'Donation submitted successfully!');
     }
 
 

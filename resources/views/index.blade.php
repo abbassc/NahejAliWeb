@@ -17,6 +17,16 @@
                 <li><a href="{{ route('home') }}">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="{{ route('login') }}">Login</a></li>
+
+
+        <!-- <li>
+          <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit">Logout</button>
+          </form>
+        </li> -->
+
+
             </ul>
         </nav>
     </header>

@@ -20,7 +20,6 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         return view('register');
-        // return view('auth.register');
     }
 
     /**
@@ -48,14 +47,15 @@ class RegisteredUserController extends Controller
         // Create corresponding role record
         if ($user->role === 'volunteer') {
             \App\Models\Volunteer::create([
-                'id' => $user->id,
+                'user_id' => $user->id,
+                'name' => $request->name,
                 'availability' => $request->availability,
                 'location' => $request->location,
                 'phone' => $request->phone,
             ]);
         } else {
             \App\Models\Donor::create([
-                'id' => $user->id,
+                'user_id' => $user->id,
                 'location' => $request->location,
                 'phone' => $request->phone,
             ]);

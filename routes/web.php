@@ -92,17 +92,22 @@ Route::middleware(['auth', \App\Http\Middleware\Role::class.':admin'])->prefix('
     // Assign Donation to Volunteer
     Route::post('/donations/{id}/assign', [AdminsController::class, 'assignDonation'])
         ->name('admin.donations.assign');
+    // Complete Donation
+    Route::post('/donations/{id}/complete', [AdminsController::class, 'completeDonation'])
+        ->name('admin.donations.complete');
 
     // Manage Volunteers
     Route::get('/volunteers', [AdminsController::class, 'listVolunteers'])
         ->name('admin.volunteers.index');
-    Route::get('/volunteers/add', [AdminsController::class, 'addVolunteer'])
+        Route::get('/volunteers/add', [AdminsController::class, 'addVolunteer'])
         ->name('admin.volunteers.add');
     Route::post('/volunteers', [AdminsController::class, 'storeVolunteer'])
         ->name('admin.volunteers.store');
+    Route::get('/volunteers/{id}/edit', [AdminsController::class, 'editVolunteer'])
+        ->name('admin.volunteers.edit');
     Route::put('/volunteers/{id}', [AdminsController::class, 'updateVolunteer'])
         ->name('admin.volunteers.update');
-    Route::delete('/volunteers/{id}', [AdminsController::class, 'deleteVolunteer'])
+        Route::delete('/volunteers/{id}', [AdminsController::class, 'deleteVolunteer'])
         ->name('admin.volunteers.delete');
     // Manage Donors
     Route::get('/donors', [AdminsController::class, 'listDonors'])
@@ -122,10 +127,16 @@ Route::middleware(['auth', \App\Http\Middleware\Role::class.':admin'])->prefix('
         ->name('admin.families.add');
     Route::post('/families', [AdminsController::class, 'storeFamily'])
         ->name('admin.families.store');
+    Route::get('/families/{id}/edit', [AdminsController::class, 'editFamily'])
+        ->name('admin.families.edit');
     Route::put('/families/{id}', [AdminsController::class, 'updateFamily'])
         ->name('admin.families.update');
     Route::delete('/families/{id}', [AdminsController::class, 'deleteFamily'])
         ->name('admin.families.delete');
+
+    // Reports
+    Route::get('/reports', [AdminsController::class, 'reports'])
+        ->name('admin.reports');
 });
 
 

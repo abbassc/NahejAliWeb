@@ -9,15 +9,16 @@ class Volunteer extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['name', 'availability', 'location', 'phone'];
+    protected $primaryKey = 'user_id';
+    protected $fillable = ['user_id', 'name', 'availability', 'location', 'phone'];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
     
     public function donations()
     {
-        return $this->hasMany(Donation::class);
+        return $this->hasMany(Donation::class, 'volunteer_id', 'user_id');
     }
 } 

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('location');
             $table->string('phone');
             $table->enum('status', ['pending', 'assigned', 'collected'])->default('pending');
-            $table->foreignId('donor_id')->constrained('donors')->onDelete('cascade')->nullable();
-            $table->foreignId('volunteer_id')->constrained('volunteers')->onDelete('cascade')->nullable();
+            $table->foreignId('donor_id')->constrained('donors', 'user_id')->onDelete('cascade')->nullable();
+            $table->foreignId('volunteer_id')->constrained('volunteers', 'user_id')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

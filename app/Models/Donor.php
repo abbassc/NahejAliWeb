@@ -9,15 +9,16 @@ class Donor extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['id', 'location', 'phone'];
+    protected $primaryKey = 'user_id';
+    protected $fillable = ['user_id', 'location', 'phone'];
     
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function donations()
     {
-        return $this->hasMany(Donation::class);
+        return $this->hasMany(Donation::class, 'donor_id', 'user_id');
     }
 }

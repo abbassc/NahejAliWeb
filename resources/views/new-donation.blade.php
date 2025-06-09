@@ -21,16 +21,13 @@
     <section>
       <h2>Donate Now</h2>
 
-      <form>
+      <form action="{{ route('guest.donations.store') }}" method="POST">
         @csrf
-        <label>Name:</label>
-        <input name="name" type="text" placeholder="Enter your family name" required>
+        <label>Title:</label>
+        <input name="title" type="text" placeholder="Enter donation title" required>
 
-        <label>Phone:</label>
-        <input name="phone" type="text" placeholder="Enter your phone number" required>
-
-        <label>Donation Type:</label>
-        <select name="type" required>
+        <label>Category:</label>
+        <select name="category" required>
           <option value="">-- Select --</option>
           <option value="money">Money</option>
           <option value="food">Food</option>
@@ -38,21 +35,24 @@
         </select>
 
         <label>Amount:</label>
-        <input name="amount" type="text" placeholder="Enter amount" >
+        <input name="amount" type="number" placeholder="Enter amount">
 
-        <label>Descriptions:</label>
-        <input name="description" type="text" placeholder="Enter description">
+        <label>Description:</label>
+        <input name="description" type="text" placeholder="Enter description" required>
 
         <label>Location:</label>
         <input name="location" type="text" placeholder="Enter your location" required>
 
+        <label>Phone:</label>
+        <input name="phone" type="text" placeholder="Enter your phone number" required>
+
         <label>Date:</label>
-        <input name="date" type="date" placeholder="Enter the date" required>
+        <input name="date" type="date" required>
 
-        <label>Time:</label>
-        <input name="time" type="text" placeholder="Enter the prefered time" required>
+        <label>Preferred Time:</label>
+        <input name="prefered_time" type="datetime-local" required>
 
-        <button type="submit" onclick="">Submit Donation</button>
+        <button type="submit">Submit Donation</button>
       </form>
       
     </section>

@@ -20,7 +20,7 @@
             <button type="submit">Logout</button>
           </form>
         </li>
-        <li><button onclick="openLog()">Profile</button></li>
+        <li><a onclick="openLog()">Profile</a></li>
       </ul>
     </nav>
   </header>
@@ -62,13 +62,16 @@
 
     <section id="new-donation" style="display: none;">
 
-      <button class="button" onclick="closeAddNewDonation()">Back to Dashboard</button>
+      <button class="btn" onclick="closeAddNewDonation()">Back to Dashboard</button>
 
       <form action="{{ route('donor.donations.store') }}" method="POST">
         @csrf
         @method('POST')
-        <label>Donation Type:</label>
-        <select name="type" required>
+        <label>Title:</label>
+        <input name="title" type="text" placeholder="Enter donation title" required>
+
+        <label>Category:</label>
+        <select name="category" required>
           <option value="">-- Select --</option>
           <option value="money">Money</option>
           <option value="food">Food</option>
@@ -76,19 +79,22 @@
         </select>
 
         <label>Amount:</label>
-        <input name="amount" type="text" placeholder="Enter amount" >
+        <input name="amount" type="number" placeholder="Enter amount">
 
         <label>Description:</label>
-        <input name="description" type="text" placeholder="Enter description" >
+        <input name="description" type="text" placeholder="Enter description" required>
 
         <label>Location:</label>
         <input name="location" type="text" placeholder="Enter your location" required>
 
+        <label>Phone:</label>
+        <input name="phone" type="text" placeholder="Enter your phone number" required>
+
         <label>Date:</label>
         <input id="date" name="date" type="date" placeholder="Enter the date" required>
 
-        <label>Time:</label>
-        <input name="time" type="text" placeholder="Enter the prefered time" required>
+        <label>Preferred Time:</label>
+        <input name="prefered_time" type="datetime-local" required>
 
         <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button>
       </form>
@@ -101,18 +107,23 @@
       <p>Location: {{ $donor->location }}</p>
 
       <h3>Past Donations</h3>
-      <ul>
-        @foreach($donations as $donation)
-          <li>{{ $donation->type }} - {{ $donation->amount }} - {{ $donation->date }} - {{ ucfirst($donation->status) }}</li>
-        @endforeach
-      </ul>
       <table>
-        <tr><th>Type</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+        <tr>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Preferred Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
         @foreach($donations as $donation)
           <tr>
-            <td>{{ $donation->type }}</td>
+            <td>{{ $donation->title }}</td>
+            <td>{{ ucfirst($donation->category) }}</td>
             <td>{{ $donation->amount }}</td>
             <td>{{ $donation->date }}</td>
+            <td>{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</td>
             <td>{{ ucfirst($donation->status) }}</td>
             <td>
               <button type="button" onclick="openUpdateModal('{{ $donation->id }}')">Update</button>
@@ -127,17 +138,20 @@
       </table>
     </section>
 
-    <!-- EDITTTTTTTTTTTTTTT-->
+    <!-- Update Modal -->
     <section id="update-modal" style="display:none;">
       <h3>Update Donation</h3>
-      <form id="update-donation-form" action="{{ route('donor.donations.update') }}" method="POST">
+      <form id="update-donation-form" action="" method="POST">
         @csrf
         @method('PUT')
 
         <input type="hidden" name="donation_id" id="donation_id" />
 
-        <label>Donation Type:</label>
-        <select name="type" id="type_update" required>
+        <label>Title:</label>
+        <input name="title" id="title_update" type="text" placeholder="Enter donation title" required>
+
+        <label>Category:</label>
+        <select name="category" id="category_update" required>
           <option value="">-- Select --</option>
           <option value="money">Money</option>
           <option value="food">Food</option>
@@ -145,21 +159,24 @@
         </select>
 
         <label>Amount:</label>
-        <input name="amount" id="amount_update" type="text" placeholder="Enter amount" >
+        <input name="amount" id="amount_update" type="number" placeholder="Enter amount">
 
         <label>Description:</label>
-        <input name="description" id="description_update" type="text" placeholder="Enter description" >
+        <input name="description" id="description_update" type="text" placeholder="Enter description" required>
 
         <label>Location:</label>
         <input name="location" id="location_update" type="text" placeholder="Enter your location" required>
 
+        <label>Phone:</label>
+        <input name="phone" id="phone_update" type="text" placeholder="Enter your phone number" required>
+
         <label>Date:</label>
-        <input name="date" id="date_update" type="date" placeholder="Enter the date" required>
+        <input name="date" id="date_update" type="date" required>
 
-        <label>Time:</label>
-        <input name="time" id="time_update" type="text" placeholder="Enter the preferred time" required>
+        <label>Preferred Time:</label>
+        <input name="prefered_time" id="prefered_time_update" type="datetime-local" required>
 
-        <button type="submit" onclick="showUpdateConfirmation()">Update Donation</button>
+        <button type="submit">Update Donation</button>
         <button type="button" onclick="closeUpdateModal()">Cancel</button>
       </form>
     </section>
@@ -199,31 +216,37 @@
     const donationsData = {
       @foreach($donations as $donation)
         {{ $donation->id }} : {
-          type: '{{ $donation->type }}',
+          title: '{{ $donation->title }}',
+          category: '{{ $donation->category }}',
           amount: '{{ $donation->amount }}',
           description: '{{ $donation->description }}',
           location: '{{ $donation->location }}',
+          phone: '{{ $donation->phone }}',
           date: '{{ $donation->date }}',
-          time: '{{ $donation->time }}'
+          prefered_time: '{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d\TH:i') }}'
         },
       @endforeach
     };
 
-    function openUpdateModal(donationId){
-      closeRemaining();
-      closeAddNewDonation();
-      const donation = donationsData[donationId];
-      if(!donation) return alert('Donation data not found');
+    function openUpdateModal(donationId) {
+        closeRemaining();
+        closeAddNewDonation();
+        document.getElementById('update-modal').style.display = 'block';
+        document.getElementById('donation_id').value = donationId;
+        document.getElementById('update-donation-form').action = `/donor/donations/${donationId}`;
+        
+        // Get donation data from the donationsData object
+        const donation = donationsData[donationId];
+        if(!donation) return alert('Donation data not found');
 
-      document.getElementById("update-modal").style.display = "block";
-
-      document.getElementById("donation_id").value = donationId;
-      document.getElementById("type_update").value = donation.type;
-      document.getElementById("amount_update").value = donation.amount;
-      document.getElementById("description_update").value = donation.description;
-      document.getElementById("location_update").value = donation.location;
-      document.getElementById("date_update").value = donation.date;
-      document.getElementById("time_update").value = donation.time;
+        document.getElementById("title_update").value = donation.title;
+        document.getElementById("category_update").value = donation.category;
+        document.getElementById("amount_update").value = donation.amount;
+        document.getElementById("description_update").value = donation.description;
+        document.getElementById("location_update").value = donation.location;
+        document.getElementById("phone_update").value = donation.phone;
+        document.getElementById("date_update").value = donation.date;
+        document.getElementById("prefered_time_update").value = donation.prefered_time;
     }
     function closeUpdateModal() {
       document.getElementById("update-modal").style.display = "none";
@@ -256,3 +279,15 @@
   </footer>
 </body>
 </html>
+
+<!-- if(!donation) return alert('Donation data not found');
+
+document.getElementById("update-modal").style.display = "block";
+
+document.getElementById("donation_id").value = donationId;
+document.getElementById("type_update").value = donation.type;
+document.getElementById("amount_update").value = donation.amount;
+document.getElementById("description_update").value = donation.description;
+document.getElementById("location_update").value = donation.location;
+document.getElementById("date_update").value = donation.date;
+document.getElementById("time_update").value = donation.time; -->

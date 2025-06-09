@@ -18,11 +18,11 @@
         <li><a href="#panel">Panel</a></li>
         <li><a href="#families">Families</a></li>
         <li><a href="#report">Reports</a></li>
-        <li><button onclick="openLog()">Profile</button></li>
+        <li><a onclick="openLog()">Profile</a></li>
         <li>
           <form action="{{ route('logout') }}" method="POST" style="display: inline;">
             @csrf
-            <button type="submit">Logout</button>
+            <button type="submit" class="btn">Logout</button>
           </form>
         </li>
       </ul>
@@ -37,9 +37,8 @@
 
 
 
-
   <div id="log" style="display: none;">
-  <button onclick="closeLog()">Close</button>
+  <button class="btn" onclick="closeLog()">Close</button>
     <x-app-layout>
             <x-slot name="header">
                 <h2 >
@@ -68,147 +67,131 @@
 
       <section id="donations">
         <h2>New Donations</h2>
-
-        <ul>
-
-          <li>
-            <div class="card">
-              <h3> Donation title</h3>
-              <p>location:      time:    </p>
-              <button class="button" onclick="">Assign to</button>
-            </div>
-          </li>
-
-          <li>
-            <div class="card">
-              <h3> Donation 2 title</h3>
-              <p>location:      time:    </p>
-              <button class="button" onclick="">Assign to</button>
-            </div>
-          </li>
-
-      </ul>
+        @if($pendingDonations->count() > 0)
+          <ul>
+            @foreach($pendingDonations as $donation)
+              <li>
+                <div class="card">
+                  <h3>{{ $donation->title }}</h3>
+                  <p>Location: {{ $donation->location }}</p>
+                  <p>Date: {{ $donation->date }}</p>
+                  <p>Preferred Time: {{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</p>
+                  <p>Category: {{ ucfirst($donation->category) }}</p>
+                  <p>Amount: {{ $donation->amount }}</p>
+                  <form action="{{ route('admin.donations.assign', $donation->id) }}" method="POST">
+                    @csrf
+                    <select name="volunteer_id" required>
+                      <option value="">Select Volunteer</option>
+                      @foreach($availableVolunteers as $volunteer)
+                        <option value="{{ $volunteer->id }}">{{ $volunteer->user->name }}</option>
+                      @endforeach
+                    </select>
+                    <button type="submit" class="btn">Assign to Volunteer</button>
+                  </form>
+                </div>
+              </li>
+            @endforeach
+          </ul>
+        @else
+          <p>No pending donations at the moment.</p>
+        @endif
       </section>
 
       <section id="volunteers">
         <h2>Volunteers</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Volunteer Name</th>
-              <th>Location</th>
-              <th>Availability</th>
-              <th>Phone</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+        @if($volunteers->count() > 0)
+          <table>
+            <thead>
+              <tr>
+                <th>Volunteer Name</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Active Tasks</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($volunteers as $volunteer)
+                <tr>
+                  <td>{{ $volunteer->user->name }}</td>
+                  <td>{{ $volunteer->location }}</td>
+                  <td>{{ $volunteer->phone }}</td>
+                  <td>{{ $volunteer->donations()->where('status', 'assigned')->count() }}</td>
+                  <td>
+                    <a href="{{ route('admin.volunteers.index') }}" class="btn">Edit</a>
+                    <form action="{{ route('admin.volunteers.delete', $volunteer->user_id) }}" method="POST" style="display: inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        @else
+          <p>No volunteers registered yet.</p>
+        @endif
       </section>
 
       <section id="families">
         <h2>Families</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Family Name</th>
-              <th>Location</th>
-              <th>Status</th>
-              <th>Phone</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
+        @if($families->count() > 0)
+          <table>
+            <thead>
+              <tr>
+                <th>Family Name</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Members</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($families as $family)
+                <tr>
+                  <td>{{ $family->name }}</td>
+                  <td>{{ $family->location }}</td>
+                  <td>{{ $family->phone }}</td>
+                  <td>{{ $family->members }}</td>
+                  <td>
+                    <a href="{{ route('admin.families.index') }}" class="btn">Edit</a>
+                    <form action="{{ route('admin.families.delete', $family->id) }}" method="POST" style="display: inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this family?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        @else
+          <p>No families registered yet.</p>
+        @endif
       </section>
 
+      <div class="stats-container">
+        <div class="card">
+          <h3>Donation Statistics</h3>
+          <p>Total Donations: {{ $totalDonations }}</p>
+          <p>Pending Donations: {{ $pendingDonations->count() }}</p>
+          <p>Completed Donations: {{ $completedDonations }}</p>
+          <a href="{{ route('admin.donations') }}" class="btn">View Details</a>
+        </div>
 
-      <div class="card">
-        <h3>إحصائيات التبرعات</h3>
-        <p>إجمالي التبرعات: 1000 دولار</p>
-        <button class="button">عرض التفاصيل</button>
-      </div>
+        <div class="card">
+          <h3>Family Statistics</h3>
+          <p>Total Families: {{ $families->count() }}</p>
+          <a href="{{ route('admin.families.index') }}" class="btn">View Details</a>
+        </div>
 
-      <div class="card">
-        <h3>إحصائيات العائلات</h3>
-        <p>إجمالي العائلات المستفيدة: 50 عائلة</p>
-        <button class="button">عرض التفاصيل</button>
-      </div>
-
-      <div class="card">
-        <h3>إحصائيات المتطوعين</h3>
-        <p>إجمالي المتطوعين: 30 متطوع</p>
-        <button class="button">عرض التفاصيل</button>
+        <div class="card">
+          <h3>Volunteer Statistics</h3>
+          <p>Total Volunteers: {{ $volunteers->count() }}</p>
+          <p>Active Volunteers: {{ $activeVolunteers }}</p>
+          <a href="{{ route('admin.volunteers.index') }}" class="btn">View Details</a>
+        </div>
       </div>
     </div>
 
@@ -216,41 +199,21 @@
       <!-- Sidebar -->
       <div class="sidebar">
         <h2>Admin Panel</h2>
-        <a href="#system-management">System Management</a>
-        <a href="#manage-users">Manage Users</a>
-        <a href="#assign-volunteers">Assign Volunteers</a>
-        <a href="#generate-reports">Generate Reports</a>
+        <a href="{{ route('admin.donations') }}">Manage Donations</a>
+        <a href="{{ route('admin.volunteers.index') }}">Manage Volunteers</a>
+        <a href="{{ route('admin.families.index') }}">Manage Families</a>
+        <a href="{{ route('admin.reports') }}">Generate Reports</a>
       </div>
 
       <!-- Main Content -->
       <div class="main-content">
-
-        <!-- System Management -->
-        <div id="system-management" class="section">
-          <h3>System Management</h3>
-          <p>Configure system settings, permissions, security options.</p>
-          <button class="button">Edit Settings</button>
-        </div>
-
-        <!-- Manage Users  -->
-        <div id="manage-users" class="section">
-          <h3>Manage Users</h3>
-          <p>Add, update, or remove users and assign roles</p>
-          <button class="button">Manage Users</button>
-        </div>
-
-        <!-- Assign Volunteers -->
-        <div id="assign-volunteers" class="section">
-          <h3>Assign Volunteers</h3>
-          <p>Assign volunteers to tasks, centers, or events.</p>
-          <button class="button">Assign Volunteers</button>
-        </div>
-
-        <!-- Generate Reports  -->
-        <div id="generate-reports" class="section">
-          <h3>Generate Reports</h3>
-          <p>Produce reports on donations, families, and volunteer activity.</p>
-          <button class="button">Generate Reports</button>
+        <div class="section">
+          <h3>Quick Actions</h3>
+          <div class="action-buttons">
+            <a href="{{ route('admin.volunteers.add') }}" class="btn">Add New Volunteer</a>
+            <a href="{{ route('admin.families.add') }}" class="btn">Add New Family</a>
+            <a href="{{ route('admin.donations') }}" class="btn">View All Donations</a>
+          </div>
         </div>
       </div>
     </section>
@@ -297,4 +260,12 @@
     <p>&copy; 2025 Nahej Ali Organization</p>
   </footer>
 </body>
+<script>
+    function openLog(){
+    document.getElementById('log').style.display = 'block';
+  }
+  function closeLog(){
+    document.getElementById('log').style.display = 'none';
+  }
+</script>
 </html>

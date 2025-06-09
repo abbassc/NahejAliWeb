@@ -55,17 +55,17 @@ class User extends Authenticatable
 
     public function donor()
     {
-        return $this->hasOne(Donor::class, 'id'); // User.id = Donor.id
+        return $this->hasOne(Donor::class, 'user_id');
     }
 
     public function volunteer()
     {
-        return $this->hasOne(Volunteer::class, 'id'); // User.id = Volunteer.id
+        return $this->hasOne(Volunteer::class, 'user_id');
     }
 
     public function admin()
     {
-        return $this->hasOne(Admin::class, 'id'); // User.id = Admin.id
+        return $this->hasOne(Admin::class, 'user_id');
     }
 
 
