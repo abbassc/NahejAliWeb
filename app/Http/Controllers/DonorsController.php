@@ -50,7 +50,7 @@ class DonorsController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('donor.dashboard')->with('success', 'Appointment booked.');
+        return redirect()->route('donor.dashboard')->with('success', 'Donation added.');
     }
 
 

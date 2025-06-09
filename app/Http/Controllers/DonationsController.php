@@ -8,7 +8,40 @@ use Illuminate\Http\Request;
 class DonationsController extends Controller
 {
 
+    public function createDonation()
+    {
+        return view('new-donation');
+    }
 
+    // Store new donation
+    public function storeDonation(Request $request)
+    {
+
+
+
+
+        $request->validate([
+        'date' => 'required|date',
+        ]);
+
+
+
+
+        Donation::create([
+            
+            'title' => $request->title,
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'category' => $request->category,
+            'date' => $request->date,
+            'prefered_time' => $request->prefered_time,
+            'location' => $request->location,
+            'phone' => $request->phone,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('donor.dashboard')->with('success', 'Donation created.');
+    }
 
 
 

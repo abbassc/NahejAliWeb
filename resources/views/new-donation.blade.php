@@ -38,7 +38,7 @@
         </select>
 
         <label>Amount:</label>
-        <input name="amount" type="text" placeholder="Enter amount" required>
+        <input name="amount" type="text" placeholder="Enter amount" >
 
         <label>Descriptions:</label>
         <input name="description" type="text" placeholder="Enter description">

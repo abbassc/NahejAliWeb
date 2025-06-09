@@ -8,14 +8,23 @@ use App\Http\Controllers\DonorsController;
 use App\Http\Controllers\VolunteersController;
 use App\Http\Controllers\AdminsController;
 use App\Http\Controllers\DonationsController;
+//use App\Http\Controllers\NewDonationController;
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+// Create donation as guest
+Route::get('/donations/create', [DonationsController::class, 'createDonation'])->name('guest.donations.create');
+// Submit (Store) new donation as guest
+Route::post('/donations', [DonationsController::class, 'storeDonation'])->name('guest.donations.store');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    if (Auth::check()) {
+        return redirect()->route(Auth::user()->role . '.dashboard');
+    }
+    return redirect()->route('login');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -28,7 +28,7 @@
             <p>Supporting families in need across Lebanon. Join us in our mission of giving and hope.</p>
             <p>• .مبادرة شبابية لتأمين الافطارات اليومية من طعامكم للعائلات المتعففة في شهر رمضان المبارك
                 <br>ما تراه قليل؛ قد يعني الكثير <br><br></p>
-            <a class="btn" href="{{ route('donations.create') }}">Make a Donation</a>
+            <a class="btn" href="{{ route('guest.donations.create') }}">Make a Donation</a>
             <a class="btn" href="{{ route('register') }}">Join Our Family!</a>
             <br><br>
         </section>
