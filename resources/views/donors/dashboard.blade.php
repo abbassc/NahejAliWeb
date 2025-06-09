@@ -20,6 +20,7 @@
             <button type="submit">Logout</button>
           </form>
         </li>
+        <li><button onclick="openLog()">Profile</button></li>
       </ul>
     </nav>
   </header>
@@ -29,7 +30,9 @@
 
 
 
-  <x-app-layout>
+  <div id="log" style="display: none;">
+    <button onclick="closeLog()">Close</button>
+    <x-app-layout>
             <x-slot name="header">
                 <h2 >
                     {{ __('Dashboard') }}
@@ -45,7 +48,8 @@
                     </div>
                 </div>
             </div>
-        </x-app-layout>
+    </x-app-layout>
+  </div>
 
 
 
@@ -163,6 +167,14 @@
   </main>
 
   <script>
+
+  function openLog(){
+    document.getElementById('log').style.display = 'block';
+  }
+  function closeLog(){
+    document.getElementById('log').style.display = 'none';
+  }
+
     function showDonationConfirmation() {  
       let date = document.getElementById("date").value;
 

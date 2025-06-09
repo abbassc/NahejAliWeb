@@ -23,6 +23,13 @@
             <button type="submit" style="background: none; border: none; color: inherit; cursor: pointer;">Logout</button>
           </form>
         </li>
+        <li><button onclick="openLog()">Profile</button></li>
+        <li>
+          <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit">Logout</button>
+          </form>
+        </li>
       </ul>
     </nav>
   </header>
@@ -31,8 +38,9 @@
 
 
 
-
-  <x-app-layout>
+  <div id="log" style="display: none;">
+  <button onclick="closeLog()">Close</button>
+    <x-app-layout>
             <x-slot name="header">
                 <h2 >
                     {{ __('Dashboard') }}
@@ -48,7 +56,8 @@
                     </div>
                 </div>
             </div>
-        </x-app-layout>
+    </x-app-layout>
+  </div>
 
 
 
@@ -210,4 +219,12 @@
     <p>&copy; 2025 Nahej Ali Organization</p>
   </footer>
 </body>
+<script>
+  function openLog(){
+    document.getElementById('log').style.display = 'block';
+  }
+  function closeLog(){
+    document.getElementById('log').style.display = 'none';
+  }
+</script>
 </html>

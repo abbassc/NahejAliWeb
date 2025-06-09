@@ -18,6 +18,13 @@
         <li><a href="#panel">Panel</a></li>
         <li><a href="#families">Families</a></li>
         <li><a href="#report">Reports</a></li>
+        <li><button onclick="openLog()">Profile</button></li>
+        <li>
+          <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit">Logout</button>
+          </form>
+        </li>
       </ul>
     </nav>
   </header>
@@ -31,7 +38,9 @@
 
 
 
-        <x-app-layout>
+  <div id="log" style="display: none;">
+  <button onclick="closeLog()">Close</button>
+    <x-app-layout>
             <x-slot name="header">
                 <h2 >
                     {{ __('Dashboard') }}
@@ -47,7 +56,8 @@
                     </div>
                 </div>
             </div>
-        </x-app-layout>
+    </x-app-layout>
+  </div>
 
 
 
