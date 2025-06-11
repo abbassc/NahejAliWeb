@@ -37,10 +37,10 @@
                             <td>{{ $volunteer->volunteer->location ?? 'N/A' }}</td>
                             <td>
                                 <a href="{{ route('admin.volunteers.edit', $volunteer->id) }}" class="btn">Edit</a>
-                                <form action="{{ route('admin.volunteers.delete', $volunteer->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('admin.volunteers.delete', $volunteer->id) }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
+                                    <button type="submit" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
                                 </form>
                             </td>
                         </tr>

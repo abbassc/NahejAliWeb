@@ -43,19 +43,29 @@
 /* Reset & Base */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: "Segoe UI", Tahoma, 'Arial', sans-serif; background-color: #f9f9f9; color: #333; line-height: 1.6; }
+
+
+header h1 {
+    font-size: 2.2rem !important;
+    color: var(--secondary-color);
+    text-align: center !important;
+    margin: 1rem 0 !important;
+    font-weight: bold;
+} 
+
 header, footer { background: var(--primary-color); color: #fff; }
 header { padding: 1rem 2rem; padding: 0.5rem 1rem;  position: sticky;      background-color: var(--menu-bg); box-shadow: 0 2px 15px rgba(255, 105, 180, 0.1); top: 0; z-index: 100;}
 footer { text-align: center; padding: 1rem; margin-top: 2rem; }
 nav { margin: 0 auto; max-width: 1200px;}
 nav ul { gap: 1rem; gap: 1.5rem; list-style: none; display: flex;       padding: 0.2rem 0; justify-content: center; align-items: center; }
-nav a { color: var(--primary-color); text-decoration: none;       padding: 0.4rem 1.2rem;
+nav a , nav form button{ color: var(--primary-color); text-decoration: none;       padding: 0.4rem 1.2rem;
     border-radius: 15px;
     font-size: 0.9rem;
     font-weight: 610;
     text-transform: uppercase;
     letter-spacing: 0.8px;
     background-color: var(--tester-3);}
-nav a:hover { text-decoration: underline; background-color: var(--tester-4);
+nav a:hover , nav form button:hover{ text-decoration: underline; background-color: var(--tester-4);
     color: white;}
 main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 
@@ -66,9 +76,10 @@ section {
 }
 
 h1, h2, h3 {
-    color: var(--secondary-color);
-    margin-bottom: 1rem;
-    text-align: center;
+    color: var(--secondary-color) !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important;
+    font-weight: bold !important;
 }
 
 h1 {
@@ -77,8 +88,8 @@ h1 {
 }
 
 h2 {
-    font-size: 1.8rem;
-    margin-top: 1.5rem;
+    font-size: 1.8rem !important;
+    /* margin: 1.5rem 0 1rem 0 !important; */
 }
 
 h3 {
@@ -136,22 +147,58 @@ label {
 }
 
 /* Tables */
-table { width: 100%; border-collapse: collapse;      margin: 1.5rem 0;
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 1.5rem 0;
     box-shadow: 0 2px 8px var(--tester-5);
     background-color: white;
     border-radius: 10px;
-    overflow: hidden;}
+    overflow: hidden;
+}
 th, td { padding: 0.75rem; padding: 12px 15px; border: 1px solid var(--gray-1-color); border-bottom: 1px solid var(--gray-1-color); text-align: left; }
+th, td { 
+    padding: 12px 15px; 
+    border: 1px solid var(--gray-1-color); 
+    text-align: left; 
+}
 
 th {
     background: var(--tester-3);
     /*background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));*/
-    color: white;
+    color: var(--primary-color);
     font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+td {
+    color: var(--dark-gray);
+    font-size: 0.95rem;
 }
 
 tr:hover {
-    background-color: var(--tester-2); color: white;
+  /* background-color: var(--tester-2); color: white; */
+  background-color: var(--tester-7);
+}
+
+tr:nth-child(even) {
+    background-color: var(--tester-8);
+}
+
+/* Table buttons */
+table button {
+    padding: 6px 12px;
+    margin: 0 4px;
+    font-size: 0.9rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+table button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .sidebar { width: 250px; background-color: var(--primary-color); color: white; height: 100vh; padding: 20px; }
@@ -197,7 +244,7 @@ tr:hover {
   margin: 0;
 }
 
-table {
+/* table {
   width: 100%;
   border-collapse: collapse;
   margin: 1rem 0;
@@ -220,18 +267,92 @@ table th {
 
 table tr:hover {
   background: #f7fafc;
-}
+} */
 
 .button {
   display: inline-block;
   padding: 0.5rem 1rem;
-  background: #2c5282;
-  color: #fff;
+  background: var(--secondary-color);
+  /* color: #fff; */
   text-decoration: none;
   border-radius: 4px;
   transition: background 0.3s ease;
 }
 
 .button:hover {
-  background: #2b6cb0;
+  background: var(--primary-color);
 }
+
+/* Donation Form Styles */
+.donation-form {
+    background: var(--tester-8);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 10px var(--tester-5);
+    max-width: 600px;
+    margin: 1.5rem auto;
+}
+
+.donation-form input,
+.donation-form select {
+    width: 100%;
+    padding: 0.9rem;
+    margin-bottom: 1.2rem;
+    border: 2px solid var(--tester-6);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.donation-form input:focus,
+.donation-form select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.donation-form button {
+    width: 25%;
+    padding: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.donation-form button:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* .image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+} */
+
+.image-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        .image-container figure {
+            text-align: center;
+            max-width: 400px;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .image-container figcaption {
+            margin-top: 1rem;
+            font-style: italic;
+        }

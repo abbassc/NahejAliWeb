@@ -17,7 +17,7 @@ class DonationsController extends Controller
     public function storeDonation(Request $request)
     {
         $request->validate([
-            'date' => 'required|date',
+            // 'date' => 'required|date',
             'prefered_time' => 'required|date',
             'location' => 'required|string',
             'phone' => 'required|string',
@@ -34,7 +34,7 @@ class DonationsController extends Controller
             'description' => $request->description,
             'location' => $request->location,
             'phone' => $request->phone,
-            'date' => $request->date,
+            // 'date' => $request->date,
             'prefered_time' => $request->prefered_time,
             'status' => 'pending',
         ]);

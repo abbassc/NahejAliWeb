@@ -20,9 +20,9 @@
         <li><a href="#report">Reports</a></li>
         <li><a onclick="openLog()">Profile</a></li>
         <li>
-          <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+          <form action="{{ route('logout') }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
             @csrf
-            <button type="submit" class="btn">Logout</button>
+            <button type="submit" style="background: none;"><a>Logout</a></button>
           </form>
         </li>
       </ul>
@@ -37,30 +37,54 @@
 
 
 
-  <div id="log" style="display: none;">
-  <button class="btn" onclick="closeLog()">Close</button>
-    <x-app-layout>
-            <x-slot name="header">
-                <h2 >
-                    {{ __('Dashboard') }}
-                </h2>
-            </x-slot>
+    <div id="log" style="display: none;">
+    <button class="btn" onclick="closeLog()">Close</button>
+      <x-app-layout>
+              <x-slot name="header">
+                  <h2 >
+                      {{ __('Dashboard') }}
+                  </h2>
+              </x-slot>
 
-            <div >
-                <div >
-                    <div >
-                        <div >
-                            {{ __("You're logged in!") }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </x-app-layout>
-  </div>
-
-
+              <div >
+                  <div >
+                      <div >
+                          <div >
+                              {{ __("You're logged in!") }}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      </x-app-layout>
+    </div>
 
 
+
+
+
+    <section class="mainandsidebar" id="panel">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2>Admin Panel</h2>
+        <a href="{{ route('admin.donations') }}">Manage Donations</a>
+        <a href="{{ route('admin.volunteers.index') }}">Manage Volunteers</a>
+        <a href="{{ route('admin.families.index') }}">Manage Families</a>
+        <a href="{{ route('admin.reports') }}">Generate Reports</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="section">
+          <h3>Quick Actions</h3>
+          <div class="action-buttons">
+            <a href="{{ route('admin.volunteers.add') }}" class="btn">Add New Volunteer</a>
+            <a href="{{ route('admin.families.add') }}" class="btn">Add New Family</a>
+            <a href="{{ route('admin.donations') }}" class="btn">View All Donations</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
 
     <div class="dashboard" id="dashboard">
       <h1>Dashboard</h1>
@@ -74,10 +98,10 @@
                 <div class="card">
                   <h3>{{ $donation->title }}</h3>
                   <p>Location: {{ $donation->location }}</p>
-                  <p>Date: {{ $donation->date }}</p>
+                  <!-- <p>Date: {{ $donation->date }}</p> -->
                   <p>Preferred Time: {{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</p>
                   <p>Category: {{ ucfirst($donation->category) }}</p>
-                  <p>Amount: {{ $donation->amount }}</p>
+                  <p>Amount: {{ $donation->amount }} $</p>
                   <form action="{{ route('admin.donations.assign', $donation->id) }}" method="POST">
                     @csrf
                     <select name="volunteer_id" required>
@@ -119,10 +143,10 @@
                   <td>{{ $volunteer->donations()->where('status', 'assigned')->count() }}</td>
                   <td>
                     <a href="{{ route('admin.volunteers.index') }}" class="btn">Edit</a>
-                    <form action="{{ route('admin.volunteers.delete', $volunteer->user_id) }}" method="POST" style="display: inline;">
+                    <form action="{{ route('admin.volunteers.delete', $volunteer->user_id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
+                      <button type="submit" onclick="return confirm('Are you sure you want to delete this volunteer?')">Delete</button>
                     </form>
                   </td>
                 </tr>
@@ -156,10 +180,10 @@
                   <td>{{ $family->members }}</td>
                   <td>
                     <a href="{{ route('admin.families.index') }}" class="btn">Edit</a>
-                    <form action="{{ route('admin.families.delete', $family->id) }}" method="POST" style="display: inline;">
+                    <form action="{{ route('admin.families.delete', $family->id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this family?')">Delete</button>
+                      <button type="submit" onclick="return confirm('Are you sure you want to delete this family?')">Delete</button>
                     </form>
                   </td>
                 </tr>
@@ -189,71 +213,14 @@
         <div class="card">
           <h3>Volunteer Statistics</h3>
           <p>Total Volunteers: {{ $volunteers->count() }}</p>
-          <p>Active Volunteers: {{ $activeVolunteers }}</p>
           <a href="{{ route('admin.volunteers.index') }}" class="btn">View Details</a>
         </div>
       </div>
     </div>
 
-    <section class="mainandsidebar" id="panel">
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <h2>Admin Panel</h2>
-        <a href="{{ route('admin.donations') }}">Manage Donations</a>
-        <a href="{{ route('admin.volunteers.index') }}">Manage Volunteers</a>
-        <a href="{{ route('admin.families.index') }}">Manage Families</a>
-        <a href="{{ route('admin.reports') }}">Generate Reports</a>
-      </div>
+    
 
-      <!-- Main Content -->
-      <div class="main-content">
-        <div class="section">
-          <h3>Quick Actions</h3>
-          <div class="action-buttons">
-            <a href="{{ route('admin.volunteers.add') }}" class="btn">Add New Volunteer</a>
-            <a href="{{ route('admin.families.add') }}" class="btn">Add New Family</a>
-            <a href="{{ route('admin.donations') }}" class="btn">View All Donations</a>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <section id="families">
-      <h2>Family List</h2>
-      <table>
-        <tr><th>Family Name</th><th>Members</th><th>Area</th></tr>
-        <tr><td>Khalil</td><td>5</td><td>Haret Hreik</td></tr>
-        <tr><td>Mohsen</td><td>6</td><td>Corniche</td></tr>
-      </table>
-    </section>
-
-    <section id="report">
-      <h2>Donations Report</h2>
-      <table>
-        <tr>
-          <th>Donation Type</th>
-          <th>Amount</th>
-          <th>Date</th>
-        </tr>
-        <tr>
-          <td>Money</td>
-          <td>$500</td>
-          <td>March 2025</td>
-        </tr>
-        <tr>
-          <td>Food</td>
-          <td>200 kg</td>
-          <td>February 2025</td>
-        </tr>
-      </table>
-
-      <h3>Funds Distribution</h3>
-      <ul>
-        <li>50% of funds allocated to food distribution</li>
-        <li>30% allocated to family support</li>
-        <li>20% allocated to administrative costs</li>
-      </ul>
-    </section>
 
   </main>
   <footer>

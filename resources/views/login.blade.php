@@ -45,20 +45,20 @@
                 <br><br>
             </form>
 
-            <p>Forgot password? <a href="#forgot-pass">Reset password</a></p>
+            <!-- <p>Forgot password? <a href="#forgot-pass">Reset password</a></p> -->
             <p>Don't have an account? <a href="{{ route('register') }}">Sign up</a></p>
         </div>
 
-        <section id="forgot-pass" style="display: block;">
-      <h2>Reset Your Password</h2>
-      <form>
-        <label>Email:
-          <input type="email" placeholder="Enter your email" required />
-        </label>
-        <br />
-        <button type="submit">Send Reset Link</button>
-      </form>
-    </section>
+        <!-- <section id="forgot-pass" style="display: block;">
+          <h2>Reset Your Password</h2>
+          <form>
+            <label>Email:
+              <input type="email" placeholder="Enter your email" required />
+            </label>
+            <br />
+            <button type="submit">Send Reset Link</button>
+          </form>
+        </section> -->
 
     </main>
 

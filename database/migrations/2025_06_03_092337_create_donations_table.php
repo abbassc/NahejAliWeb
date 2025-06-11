@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->integer('amount')->nullable();
             $table->enum('category', ['money', 'food', 'clothes']);
-            $table->date('date');
+            // $table->date('date');
             $table->timestamp('prefered_time');
             $table->string('location');
             $table->string('phone');

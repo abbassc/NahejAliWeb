@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Donor Profile</title>
-  <link rel="stylesheet" href="{{asset('../css/styles.css')}}">
+  <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
   <script src="{{ asset('js/script.js') }}"></script>
 </head>
 <body>
@@ -13,14 +13,14 @@
     <nav>
       <ul>
         <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('donor.donations.add') }}">Donate</a></li>        
+        <li><a href="{{ route('donor.donations.add') }}">Donate</a></li>    
+        <li><a onclick="openLog()">Profile</a></li>    
         <li>
-          <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+          <form action="{{ route('logout') }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
             @csrf
-            <button type="submit">Logout</button>
+            <button type="submit" style="background: none;"><a>Logout</a></button>
           </form>
         </li>
-        <li><a onclick="openLog()">Profile</a></li>
       </ul>
     </nav>
   </header>
@@ -31,7 +31,7 @@
 
 
   <div id="log" style="display: none;">
-    <button onclick="closeLog()">Close</button>
+    <button onclick="openRemaining()">Close</button>
     <x-app-layout>
             <x-slot name="header">
                 <h2 >
@@ -55,18 +55,59 @@
 
 
 
-    <div id="remaining-2">
-      <h2>Make a donation</h2>
-      <button class="btn" onclick="openAddNewDonation()">Make a Donation</button>
-    </div>
+    
+
+    
+
+    <section id="remaining" style="display: block;">
+      <h2 style="margin-top: 0rem;">Donor Details</h2>
+      <p style="font-weight: bold;">Name: {{ $donor->user->name }}</p>
+      <p style="font-weight: bold;">Phone: {{ $donor->phone }}</p>
+      <p style="font-weight: bold;">Location: {{ $donor->location }}</p>
+
+      <div id="remaining-2">
+        <button class="btn" onclick="openAddNewDonation()">Make a Donation</button>
+      </div>
+
+      <h3>Past Donations</h3>
+      <table>
+        <tr>
+          <th>Title</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <!-- <th>Date</th> -->
+          <th>Preferred Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        @foreach($donations as $donation)
+          <tr>
+            <td>{{ $donation->title }}</td>
+            <td>{{ ucfirst($donation->category) }}</td>
+            <td>{{ $donation->amount }}</td>
+            <!-- <td>{{ $donation->date }}</td> -->
+            <td>{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</td>
+            <td>{{ ucfirst($donation->status) }}</td>
+            <td>
+              <button class="btn" type="button" onclick="openUpdateModal('{{ $donation->id }}')">Update</button>
+              <form action="{{ route('donor.donations.cancel', $donation->id)}}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" onclick="showDeleteConfirmation()">Delete</button>
+                <!-- <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer; color: inherit; font: inherit;">Delete</button> -->
+              </form>
+            </td>
+          </tr>
+        @endforeach
+      </table>
+    </section>
 
     <section id="new-donation" style="display: none;">
-
-      <button class="btn" onclick="closeAddNewDonation()">Back to Dashboard</button>
+      <h2>Make a donation</h2>
+      <button class="btn" onclick="openRemaining()">Back to Dashboard</button>
 
       <form action="{{ route('donor.donations.store') }}" method="POST">
         @csrf
-        @method('POST')
         <label>Title:</label>
         <input name="title" type="text" placeholder="Enter donation title" required>
 
@@ -90,58 +131,19 @@
         <label>Phone:</label>
         <input name="phone" type="text" placeholder="Enter your phone number" required>
 
-        <label>Date:</label>
-        <input id="date" name="date" type="date" placeholder="Enter the date" required>
-
         <label>Preferred Time:</label>
         <input name="prefered_time" type="datetime-local" required>
 
-        <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button>
+        <!-- <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button> -->
+         <br><br>
+        <button type="submit">Submit Donation</button>
       </form>
-    </section>
-
-    <section id="remaining" style="display: block;">
-      <h2>Donor Details</h2>
-      <p>Name: {{ $donor->name }}</p>
-      <p>Phone: {{ $donor->phone }}</p>
-      <p>Location: {{ $donor->location }}</p>
-
-      <h3>Past Donations</h3>
-      <table>
-        <tr>
-          <th>Title</th>
-          <th>Category</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Preferred Time</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-        @foreach($donations as $donation)
-          <tr>
-            <td>{{ $donation->title }}</td>
-            <td>{{ ucfirst($donation->category) }}</td>
-            <td>{{ $donation->amount }}</td>
-            <td>{{ $donation->date }}</td>
-            <td>{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</td>
-            <td>{{ ucfirst($donation->status) }}</td>
-            <td>
-              <button type="button" onclick="openUpdateModal('{{ $donation->id }}')">Update</button>
-              <form action="{{ route('donor.donations.cancel', $donation->id)}}" method="POST" style="display:inline;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" onclick="showDeleteConfirmation()">Delete</button>
-              </form>
-            </td>
-          </tr>
-        @endforeach
-      </table>
     </section>
 
     <!-- Update Modal -->
     <section id="update-modal" style="display:none;">
       <h3>Update Donation</h3>
-      <form id="update-donation-form" action="" method="POST">
+      <form id="update-donation-form" action="" method="POST" class="donation-form">
         @csrf
         @method('PUT')
 
@@ -170,14 +172,11 @@
         <label>Phone:</label>
         <input name="phone" id="phone_update" type="text" placeholder="Enter your phone number" required>
 
-        <label>Date:</label>
-        <input name="date" id="date_update" type="date" required>
-
         <label>Preferred Time:</label>
         <input name="prefered_time" id="prefered_time_update" type="datetime-local" required>
 
         <button type="submit">Update Donation</button>
-        <button type="button" onclick="closeUpdateModal()">Cancel</button>
+        <button type="button" onclick="openRemaining()">Cancel</button>
       </form>
     </section>
 
@@ -186,6 +185,7 @@
   <script>
 
   function openLog(){
+    closeAllModals();
     document.getElementById('log').style.display = 'block';
   }
   function closeLog(){
@@ -222,15 +222,16 @@
           description: '{{ $donation->description }}',
           location: '{{ $donation->location }}',
           phone: '{{ $donation->phone }}',
-          date: '{{ $donation->date }}',
+          // date: '{{ $donation->date }}',
           prefered_time: '{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d\TH:i') }}'
         },
       @endforeach
     };
 
     function openUpdateModal(donationId) {
-        closeRemaining();
-        closeAddNewDonation();
+        // closeRemaining();
+        // closeAddNewDonation();
+        closeAllModals();
         document.getElementById('update-modal').style.display = 'block';
         document.getElementById('donation_id').value = donationId;
         document.getElementById('update-donation-form').action = `/donor/donations/${donationId}`;
@@ -245,32 +246,41 @@
         document.getElementById("description_update").value = donation.description;
         document.getElementById("location_update").value = donation.location;
         document.getElementById("phone_update").value = donation.phone;
-        document.getElementById("date_update").value = donation.date;
         document.getElementById("prefered_time_update").value = donation.prefered_time;
     }
     function closeUpdateModal() {
       document.getElementById("update-modal").style.display = "none";
+      // openRemaining();
+    }
+
+    function openAddNewDonation(){
+      // closeRemaining();
+      closeAllModals();
+      document.getElementById("new-donation").style.display = "block";
+    }
+
+    function closeAddNewDonation(){
+      document.getElementById("new-donation").style.display = "none";
+      // openRemaining();
+    }
+
+    function openRemaining(){
+      closeAllModals();
+      document.getElementById("remaining").style.display = "block";
+      document.getElementById("remaining-2").style.display = "block";
     }
 
     function closeRemaining(){
       document.getElementById("remaining").style.display = "none";
       document.getElementById("remaining-2").style.display = "none";
+      // closeUpdateModal();
+    }
+
+    function closeAllModals(){
       closeUpdateModal();
-    }
-
-    function closeAddNewDonation(){
-      document.getElementById("new-donation").style.display = "none";
-      openRemaining();
-    }
-
-    function openAddNewDonation(){
+      closeAddNewDonation();
       closeRemaining();
-      document.getElementById("new-donation").style.display = "block";
-    }
-
-    function openRemaining(){
-      document.getElementById("remaining").style.display = "block";
-      document.getElementById("remaining-2").style.display = "block";
+      closeLog();
     }
   </script>
 

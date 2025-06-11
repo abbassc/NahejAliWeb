@@ -40,7 +40,7 @@
 
                 <div class="form-group">
                     <label for="phone">Phone:</label>
-                    <input type="text" id="phone" name="phone" value="{{ old('phone', $volunteer->volunteer->phone) }}" required>
+                    <input type="tel" id="phone" name="phone" value="{{ old('phone', $volunteer->volunteer->phone) }}" required>
                     @error('phone')
                         <span class="error">{{ $message }}</span>
                     @enderror

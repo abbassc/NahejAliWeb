@@ -18,9 +18,9 @@
         <li><a href="#tasks">Tasks</a></li>
         <li><a href="#archive">Archive</a></li>
         <li>
-          <form action="{{ route('logout') }}" method="POST">
+          <form action="{{ route('logout') }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
             @csrf
-            <button type="submit">Logout</button>
+            <button type="submit" style="background: none;"><a>Logout</a></button>
           </form>
         </li>
         <li><a onclick="openLog()">Profile</a></li>
@@ -29,10 +29,10 @@
   </header>
   <main>
     <section>
-      <h2>Welcome, {{ Auth::user()->name }}!</h2>
-      <p>Email: {{ Auth::user()->email }}</p>
-      <p>Phone: {{ Auth::user()->phone }}</p>
-      <p>Location: {{ Auth::user()->location }}</p>
+      <h2 style="margin-top: 0rem;">Welcome, {{ Auth::user()->name }}!</h2>
+      <p style="font-weight: bold;">Email: {{ Auth::user()->email }}</p>
+      <p style="font-weight: bold;">Phone: {{ Auth::user()->volunteer->phone }}</p>
+      <p style="font-weight: bold;">Location: {{ Auth::user()->volunteer->location }}</p>
     </section>
 
     <section>
@@ -47,7 +47,7 @@
               <th>Category</th>
               <th>Amount</th>
               <th>Location</th>
-              <th>Date</th>
+              <th>Date|Prefered Time</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -59,11 +59,11 @@
                 <td>{{ $donation->category }}</td>
                 <td>{{ $donation->amount }}</td>
                 <td>{{ $donation->location }}</td>
-                <td>{{ $donation->date }}</td>
+                <td>{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</td>
                 <td>{{ $donation->status }}</td>
                 <td>
                   @if($donation->status === 'assigned')
-                    <form action="{{ route('volunteer.donations.collect', $donation->id) }}" method="POST">
+                    <form action="{{ route('volunteer.donations.collect', $donation->id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                       @csrf
                       <button type="submit" class="btn">Complete</button>
                     </form>
@@ -108,9 +108,9 @@
                 <h3>{{ $donation->title }}</h3>
                 <p>Location: {{ $donation->location }}</p>
                 <p>Description: {{ $donation->description }}</p>
-                <p>Date: {{ $donation->date }}</p>
+                <!-- <p>Date: {{ $donation->date }}</p> -->
                 <p>Preferred Time: {{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</p>
-                <form action="{{ route('volunteer.donations.reserve', $donation->id) }}" method="POST">
+                <form action="{{ route('volunteer.donations.reserve', $donation->id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                   @csrf
                   <button type="submit" class="btn">Reserve Donation</button>
                 </form>
@@ -134,9 +134,9 @@
                 <h3>{{ $donation->title }}</h3>
                 <p>Location: {{ $donation->location }}</p>
                 <p>Description: {{ $donation->description }}</p>
-                <p>Date: {{ $donation->date }}</p>
+                <!-- <p>Date: {{ $donation->date }}</p> -->
                 <p>Preferred Time: {{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</p>
-                <form action="{{ route('volunteer.donations.collect', $donation->id) }}" method="POST">
+                <form action="{{ route('volunteer.donations.collect', $donation->id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                   @csrf
                   <button type="submit" class="btn">Mark as Collected</button>
                 </form>
@@ -150,7 +150,7 @@
     </section>
 
     <section id="archive">
-      <h3>Past Contributions</h3>
+      <h2>Past Contributions</h3>
       @if($completedDonations->count() > 0)
         <ul>
           @foreach($completedDonations as $donation)
@@ -159,7 +159,7 @@
                 <h3>{{ $donation->title }}</h3>
                 <p>Location: {{ $donation->location }}</p>
                 <p>Description: {{ $donation->description }}</p>
-                <p>Date: {{ $donation->date }}</p>
+                <p>Preferred Time: {{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</p>
                 <p>Status: {{ ucfirst($donation->status) }}</p>
               </div>
             </li>

@@ -27,7 +27,7 @@
                         <th>Donor</th>
                         <th>Volunteer</th>
                         <th>Status</th>
-                        <th>Date</th>
+                        <th>Date|Prefered Time</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -37,15 +37,15 @@
                             <td>{{ $donation->title }}</td>
                             <td>{{ ucfirst($donation->category) }}</td>
                             <td>{{ $donation->amount }}</td>
-                            <td>{{ $donation->donor->name ?? 'N/A' }}</td>
-                            <td>{{ $donation->volunteer->name ?? 'Not Assigned' }}</td>
+                            <td>{{ $donation->donor->user->name ?? 'N/A' }}</td>
+                            <td>{{ $donation->volunteer->user->name ?? 'Not Assigned' }}</td>
                             <td>{{ ucfirst($donation->status) }}</td>
-                            <td>{{ $donation->created_at->format('Y-m-d') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</td>
                             <td>
                                 @if($donation->status === 'pending')
-                                    <form action="{{ route('admin.donations.assign', $donation->id) }}" method="POST" style="display: inline;">
+                                    <form action="{{ route('admin.donations.assign', $donation->id) }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                                         @csrf
-                                        <button type="submit" class="btn">Assign</button>
+                                        <button type="submit">Assign</button>
                                     </form>
                                 @endif
                             </td>

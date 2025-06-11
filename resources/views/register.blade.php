@@ -41,7 +41,7 @@
                 <br>
                 <div>
                     <label for="phone" :value="__('Phone')"> Phone: </label>
-                    <input type="number" :value="old('phone')" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    <input type="tel" :value="old('phone')" id="phone" name="phone" placeholder="Enter your phone number" required>
                 </div>
 
                 <br>
@@ -96,7 +96,7 @@
             <br>
             <div>
                 <label for="phone" :value="__('Phone')"> Phone: </label>
-                <input type="number" :value="old('phone')" id="phone" name="phone" placeholder="Enter your phone number" required>
+                <input type="tel" :value="old('phone')" id="phone" name="phone" placeholder="Enter your phone number" required>
             </div>
 
             <br>

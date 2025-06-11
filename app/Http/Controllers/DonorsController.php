@@ -23,31 +23,33 @@ class DonorsController extends Controller
     // Store new donation
     public function storeDonation(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'category' => 'required|in:money,food,clothes',
-            'amount' => 'nullable|numeric',
-            'description' => 'nullable|string',
-            'location' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'date' => 'required|date',
-            'prefered_time' => 'required|date',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'category' => 'required|in:money,food,clothes',
+                'amount' => 'nullable|numeric',
+                'description' => 'nullable|string',
+                'location' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'prefered_time' => 'required|date',
+            ]);
 
-        $donation = Donation::create([
-            'donor_id' => Auth::user()->donor->user_id,
-            'title' => $request->title,
-            'category' => $request->category,
-            'amount' => $request->amount,
-            'description' => $request->description,
-            'location' => $request->location,
-            'phone' => $request->phone,
-            'date' => $request->date,
-            'prefered_time' => $request->prefered_time,
-            'status' => 'pending'
-        ]);
+            $donation = Donation::create([
+                'donor_id' => Auth::user()->donor->user_id,
+                'title' => $request->title,
+                'category' => $request->category,
+                'amount' => $request->amount,
+                'description' => $request->description,
+                'location' => $request->location,
+                'phone' => $request->phone,
+                'prefered_time' => $request->prefered_time,
+                'status' => 'pending'
+            ]);
 
-        return redirect()->route('donor.dashboard')->with('success', 'Donation created successfully!');
+            return redirect()->route('donor.dashboard')->with('success', 'Donation created successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error creating donation: ' . $e->getMessage());
+        }
     }
 
 
@@ -55,33 +57,35 @@ class DonorsController extends Controller
     // Update an donation (from modal)
     public function updateDonation(Request $request, $donation_id)
     {
-        $donation = Donation::where('id', $donation_id)
-            ->where('donor_id', Auth::user()->donor->user_id)
-            ->firstOrFail();
+        try {
+            $donation = Donation::where('id', $donation_id)
+                ->where('donor_id', Auth::user()->donor->user_id)
+                ->firstOrFail();
 
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'category' => 'required|in:money,food,clothes',
+                'amount' => 'nullable|numeric',
+                'description' => 'nullable|string',
+                'location' => 'required|string|max:255',
+                'phone' => 'required|string|max:20',
+                'prefered_time' => 'required|date',
+            ]);
 
+            $donation->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'amount' => $request->amount,
+                'category' => $request->category,
+                'prefered_time' => $request->prefered_time,
+                'location' => $request->location,
+                'phone' => $request->phone,
+            ]);
 
-
-        $request->validate([
-        'date' => 'required|date',
-        ]);
-
-
-
-
-
-        $donation->update([
-            'title' => $request->title,
-            'description' => $request->description,
-            'amount' => $request->amount,
-            'category' => $request->category,
-            'date' => $request->date,
-            'prefered_time' => $request->prefered_time,
-            'location' => $request->location,
-            'phone' => $request->phone,
-        ]);
-
-        return redirect()->route('donor.dashboard')->with('success', 'Donation updated.');
+            return redirect()->route('donor.dashboard')->with('success', 'Donation updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error updating donation: ' . $e->getMessage());
+        }
     }
 
     
@@ -89,13 +93,17 @@ class DonorsController extends Controller
     // Cancel donation
     public function cancelDonation($donation_id)
     {
-        $donation = Donation::where('id', $donation_id)
-            ->where('donor_id', Auth::user()->donor->user_id)
-            ->firstOrFail();
+        try {
+            $donation = Donation::where('id', $donation_id)
+                ->where('donor_id', Auth::user()->donor->user_id)
+                ->firstOrFail();
 
-        $donation->delete();
+            $donation->delete();
 
-        return redirect()->route('donor.dashboard')->with('success', 'Donation cancelled.');
+            return redirect()->route('donor.dashboard')->with('success', 'Donation cancelled successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error cancelling donation: ' . $e->getMessage());
+        }
     }
     
 

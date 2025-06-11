@@ -142,6 +142,11 @@ class AdminsController extends Controller
         return view('admin.volunteers.index', compact('volunteers'));
     }
 
+    public function addVolunteer()
+    {
+        return view('admin.volunteers.add');
+    }
+
 
 
     // ----------------- Donors -----------------
@@ -258,10 +263,7 @@ class AdminsController extends Controller
 
     public function listDonations()
     {
-        $donations = Donation::with(['donor', 'volunteer'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
+        $donations = Donation::with(['donor.user', 'volunteer.user'])->paginate(10);
         return view('admin.donations.index', compact('donations'));
     }
 

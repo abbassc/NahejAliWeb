@@ -38,10 +38,10 @@
                             <td>{{ $family->members }}</td>
                             <td>
                                 <a href="{{ route('admin.families.edit', $family->id) }}" class="btn">Edit</a>
-                                <form action="{{ route('admin.families.delete', $family->id) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('admin.families.delete', $family->id) }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn" onclick="return confirm('Are you sure you want to delete this family?')">Delete</button>
+                                    <button type="submit"  onclick="return confirm('Are you sure you want to delete this family?')">Delete</button>
                                 </form>
                             </td>
                         </tr>

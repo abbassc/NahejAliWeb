@@ -44,10 +44,10 @@
         <input name="location" type="text" placeholder="Enter your location" required>
 
         <label>Phone:</label>
-        <input name="phone" type="text" placeholder="Enter your phone number" required>
+        <input name="phone" type="tel" placeholder="Enter your phone number" required>
 
-        <label>Date:</label>
-        <input name="date" type="date" required>
+        <!-- <label>Date:</label>
+        <input name="date" type="date" required> -->
 
         <label>Preferred Time:</label>
         <input name="prefered_time" type="datetime-local" required>
