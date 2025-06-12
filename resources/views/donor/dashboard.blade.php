@@ -94,7 +94,6 @@
                 @csrf
                 @method('DELETE')
                 <button type="submit" onclick="showDeleteConfirmation()">Delete</button>
-                <!-- <button type="submit" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer; color: inherit; font: inherit;">Delete</button> -->
               </form>
             </td>
           </tr>
@@ -132,11 +131,11 @@
         <input name="phone" type="text" placeholder="Enter your phone number" required>
 
         <label>Preferred Time:</label>
-        <input name="prefered_time" type="datetime-local" required>
+        <input id="prefered_time" name="prefered_time" type="datetime-local" required>
 
-        <!-- <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button> -->
-         <br><br>
-        <button type="submit">Submit Donation</button>
+        <br><br>
+        <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button>
+        <!-- <button type="submit">Submit Donation</button> -->
       </form>
     </section>
 
@@ -175,7 +174,7 @@
         <label>Preferred Time:</label>
         <input name="prefered_time" id="prefered_time_update" type="datetime-local" required>
 
-        <button type="submit">Update Donation</button>
+        <button type="submit" onclick="showUpdateConfirmation()">Update Donation</button>
         <button type="button" onclick="openRemaining()">Cancel</button>
       </form>
     </section>
@@ -193,10 +192,10 @@
   }
 
     function showDonationConfirmation() {  
-      let date = document.getElementById("date").value;
+      let prefered_time = document.getElementById("prefered_time").value;
 
-      if (date) {
-          alert(`Donation added on ${date}!`);
+      if (prefered_time) {
+          alert(`Donation added on ${prefered_time}!`);
       }
       else {
           alert("Please select all required values.");

@@ -50,9 +50,9 @@
         <input name="date" type="date" required> -->
 
         <label>Preferred Time:</label>
-        <input name="prefered_time" type="datetime-local" required>
+        <input id="prefered_time" name="prefered_time" type="datetime-local" required>
 
-        <button type="submit">Submit Donation</button>
+        <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button>
       </form>
       
     </section>
@@ -61,4 +61,18 @@
     <p>&copy; 2025 Nahej Ali Organization</p>
   </footer>
 </body>
+
+<script>
+  function showDonationConfirmation() {  
+      let prefered_time = document.getElementById("prefered_time").value;
+
+      if (prefered_time) {
+          alert(`Donation added on ${prefered_time}!`);
+      }
+      else {
+          alert("Please select all required values.");
+      }
+    }
+</script>
+
 </html>

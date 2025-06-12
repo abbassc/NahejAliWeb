@@ -201,7 +201,7 @@ table button:hover {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.sidebar { width: 250px; background-color: var(--primary-color); color: white; height: 100vh; padding: 20px; }
+.sidebar { width: 250px; background-color: var(--primary-color); color: white; height: 100vh; padding: 30px; }
 .sidebar h2 { margin-top: 0; color: #fff; }
 .sidebar a { color: #ddd; display: block; padding: 10px; text-decoration: none; margin-bottom: 10px; }
 .sidebar a:hover { background-color: var(--secondary-color); }

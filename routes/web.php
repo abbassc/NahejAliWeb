@@ -99,7 +99,7 @@ Route::middleware(['auth', \App\Http\Middleware\Role::class.':admin'])->prefix('
     // Manage Volunteers
     Route::get('/volunteers', [AdminsController::class, 'listVolunteers'])
         ->name('admin.volunteers.index');
-        Route::get('/volunteers/add', [AdminsController::class, 'addVolunteer'])
+    Route::get('/volunteers/add', [AdminsController::class, 'addVolunteer'])
         ->name('admin.volunteers.add');
     Route::post('/volunteers', [AdminsController::class, 'storeVolunteer'])
         ->name('admin.volunteers.store');
@@ -107,8 +107,9 @@ Route::middleware(['auth', \App\Http\Middleware\Role::class.':admin'])->prefix('
         ->name('admin.volunteers.edit');
     Route::put('/volunteers/{id}', [AdminsController::class, 'updateVolunteer'])
         ->name('admin.volunteers.update');
-        Route::delete('/volunteers/{id}', [AdminsController::class, 'deleteVolunteer'])
+    Route::delete('/volunteers/{id}', [AdminsController::class, 'deleteVolunteer'])
         ->name('admin.volunteers.delete');
+
     // Manage Donors
     Route::get('/donors', [AdminsController::class, 'listDonors'])
         ->name('admin.donors.index');
@@ -120,6 +121,7 @@ Route::middleware(['auth', \App\Http\Middleware\Role::class.':admin'])->prefix('
         ->name('admin.donors.update');
     Route::delete('/donors/{id}', [AdminsController::class, 'deleteDonor'])
         ->name('admin.donors.delete');
+        
     // Manage Families
     Route::get('/families', [AdminsController::class, 'listFamilies'])
         ->name('admin.families.index');

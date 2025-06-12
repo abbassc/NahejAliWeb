@@ -43,7 +43,6 @@ class AdminsController extends Controller
     {
         $donors = Donor::with('user')->get();
         $volunteers = Volunteer::with('user')->get();
-        $availableVolunteers = Volunteer::with('user')->get();
 
         $pendingDonations = Donation::where('status', 'pending')->get();
         $assignedDonations = Donation::where('status', 'assigned')->with('volunteer.user')->get();
@@ -53,19 +52,16 @@ class AdminsController extends Controller
 
         $totalDonations = Donation::count();
         $completedDonations = Donation::where('status', 'collected')->count();
-        $activeVolunteers = Volunteer::where('availability', 'available')->count();
 
         return view('admin.dashboard', compact(
             'donors', 
             'volunteers', 
-            'availableVolunteers',
             'pendingDonations', 
             'assignedDonations', 
             'collectedDonations', 
             'families',
             'totalDonations',
             'completedDonations',
-            'activeVolunteers'
         ));
     }
 
@@ -136,8 +132,7 @@ class AdminsController extends Controller
     public function listVolunteers()
     {
         $volunteers = User::where('role', 'volunteer')
-            ->with('volunteer')
-            ->paginate(10);
+            ->with('volunteer');
 
         return view('admin.volunteers.index', compact('volunteers'));
     }
@@ -192,6 +187,14 @@ class AdminsController extends Controller
         User::destroy($id);
         
         return redirect()->route('admin.dashboard')->with('success', 'Donor deleted.');
+    }
+
+    public function listDonors()
+    {
+        $donors = User::where('role', 'donor')
+            ->with('donor')->get();
+
+        return view('admin.donors.index', compact('donors'));
     }
 
 

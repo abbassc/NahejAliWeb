@@ -13,11 +13,11 @@
     <h1>Admin Page</h1>
     <nav>
       <ul type="disc">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#panel">Panel</a></li>
-        <li><a href="#families">Families</a></li>
-        <li><a href="#report">Reports</a></li>
+        <li><a  href="{{ route('home') }}">Home</a></li>
+        <li><a onclick="openDashboard()">Dashboard</a></li>
+        <!-- <li><a href="#panel">Panel</a></li> -->
+        <!-- <li><a href="#families">Families</a></li> -->
+        <!-- <li><a href="#report">Reports</a></li> -->
         <li><a onclick="openLog()">Profile</a></li>
         <li>
           <form action="{{ route('logout') }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
@@ -80,14 +80,37 @@
             <a href="{{ route('admin.volunteers.add') }}" class="btn">Add New Volunteer</a>
             <a href="{{ route('admin.families.add') }}" class="btn">Add New Family</a>
             <a href="{{ route('admin.donations') }}" class="btn">View All Donations</a>
+            <a href="{{ route('admin.donors.index') }}" class="btn">View All Donors</a>
           </div>
+        </div>
+
+        <div>
+          <div class="card">
+          <h3>Donation Statistics</h3>
+          <p>Total Donations: {{ $totalDonations }}</p>
+          <p>Pending Donations: {{ $pendingDonations->count() }}</p>
+          <p>Completed Donations: {{ $completedDonations }}</p>
+          <a href="{{ route('admin.donations') }}" class="btn">View Details</a>
+        </div>
+
+        <div class="card">
+          <h3>Family Statistics</h3>
+          <p>Total Families: {{ $families->count() }}</p>
+          <a href="{{ route('admin.families.index') }}" class="btn">View Details</a>
+        </div>
+
+        <div class="card">
+          <h3>Volunteer Statistics</h3>
+          <p>Total Volunteers: {{ $volunteers->count() }}</p>
+          <a href="{{ route('admin.volunteers.index') }}" class="btn">View Details</a>
+        </div>
         </div>
       </div>
     </section>
     
 
-    <div class="dashboard" id="dashboard">
-      <h1>Dashboard</h1>
+    <section class="dashboard" id="dashboard" style="display: none;">
+      <h1 style="font-size: 2rem; color: var(--primary-color) !important;" >Dashboard</h1>
 
       <section id="donations">
         <h2>New Donations</h2>
@@ -106,8 +129,8 @@
                     @csrf
                     <select name="volunteer_id" required>
                       <option value="">Select Volunteer</option>
-                      @foreach($availableVolunteers as $volunteer)
-                        <option value="{{ $volunteer->id }}">{{ $volunteer->user->name }}</option>
+                      @foreach($volunteers as $volunteer)
+                        <option value="{{ $volunteer->user_id }}">{{ $volunteer->user->name }} - location: {{ $volunteer->location }}</option>
                       @endforeach
                     </select>
                     <button type="submit" class="btn">Assign to Volunteer</button>
@@ -130,7 +153,7 @@
                 <th>Volunteer Name</th>
                 <th>Location</th>
                 <th>Phone</th>
-                <th>Active Tasks</th>
+                <th>Assigned Donations</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -195,7 +218,46 @@
         @endif
       </section>
 
+      <section id="donors">
+        <h2>Donors</h2>
+        @if($donors->count() > 0)
+          <table>
+            <thead>
+              <tr>
+                <th>Donor Name</th>
+                <th>Location</th>
+                <th>Phone</th>
+                <th>Donations Made</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($donors as $donor)
+                <tr>
+                  <td>{{ $donor->user->name }}</td>
+                  <td>{{ $donor->location }}</td>
+                  <td>{{ $donor->phone }}</td>
+                  <td>{{ $donor->donations()->count() }}</td>
+                  <td>
+                    <form action="{{ route('admin.donors.delete', $donor->user_id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" onclick="return confirm('Are you sure you want to delete this donor?')">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        @else
+          <p>No Donors registered yet.</p>
+        @endif
+      </section>
+
+    
       <div class="stats-container">
+        <h2>Stats</h2>
+
         <div class="card">
           <h3>Donation Statistics</h3>
           <p>Total Donations: {{ $totalDonations }}</p>
@@ -215,8 +277,11 @@
           <p>Total Volunteers: {{ $volunteers->count() }}</p>
           <a href="{{ route('admin.volunteers.index') }}" class="btn">View Details</a>
         </div>
+
       </div>
-    </div>
+
+
+    </section>
 
     
 
@@ -228,11 +293,35 @@
   </footer>
 </body>
 <script>
-    function openLog(){
+  function openLog(){
+    closeAllModals();
     document.getElementById('log').style.display = 'block';
   }
   function closeLog(){
     document.getElementById('log').style.display = 'none';
+  }
+
+  function openPanel(){
+    closeAllModals();
+    document.getElementById('panel').style.display = 'block';
+  }
+  function closePanel(){
+    document.getElementById('panel').style.display = 'none';
+  }
+
+  function openDashboard(){
+    closeAllModals();
+    document.getElementById('dashboard').style.display = 'block';
+  }
+  function closeDashboard(){
+    document.getElementById('dashboard').style.display = 'none';
+  }
+
+
+  function closeAllModals(){
+    closeLog();
+    closePanel();
+    closeDashboard();
   }
 </script>
 </html>

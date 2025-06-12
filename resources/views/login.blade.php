@@ -6,10 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login</title>
   <link rel="stylesheet" href="{{asset('../css/styles.css')}}">
- 
-
-        <!-- body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; } -->
-
 </head>
 
 <body>
