@@ -132,7 +132,7 @@ class AdminsController extends Controller
     public function listVolunteers()
     {
         $volunteers = User::where('role', 'volunteer')
-            ->with('volunteer');
+            ->with('volunteer')->get();
 
         return view('admin.volunteers.index', compact('volunteers'));
     }
