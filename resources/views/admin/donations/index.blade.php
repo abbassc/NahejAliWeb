@@ -28,7 +28,7 @@
                         <th>Volunteer</th>
                         <th>Status</th>
                         <th>Date|Prefered Time</th>
-                        <th>Actions</th>
+                        <!-- <th>Actions</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -41,14 +41,14 @@
                             <td>{{ $donation->volunteer->user->name ?? 'Not Assigned' }}</td>
                             <td>{{ ucfirst($donation->status) }}</td>
                             <td>{{ \Carbon\Carbon::parse($donation->prefered_time)->format('Y-m-d H:i') }}</td>
-                            <td>
+                            <!-- <td>
                                 @if($donation->status === 'pending')
                                     <form action="{{ route('admin.donations.assign', $donation->id) }}" method="POST" style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                                         @csrf
                                         <button type="submit">Assign</button>
                                     </form>
                                 @endif
-                            </td>
+                            </td> -->
                         </tr>
                     @endforeach
                 </tbody>

@@ -23,7 +23,7 @@ class DonationsController extends Controller
             'phone' => 'required|string',
             'title' => 'required|string',
             'category' => 'required|string',
-            'amount' => 'required|numeric',
+            // 'amount' => 'required|numeric',
             'description' => 'required|string',
         ]);
 
@@ -37,6 +37,7 @@ class DonationsController extends Controller
             // 'date' => $request->date,
             'prefered_time' => $request->prefered_time,
             'status' => 'pending',
+            'donor_id' => null 
         ]);
 
         return redirect()->route('home')->with('success', 'Donation submitted successfully!');

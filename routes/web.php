@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 // Create donation as guest
-Route::get('/donations/create', [DonationsController::class, 'createDonation'])->name('guest.donations.create');
+Route::get('/guest/donations/create', [DonationsController::class, 'createDonation'])->name('guest.donations.create');
 // Submit (Store) new donation as guest
-Route::post('/donations', [DonationsController::class, 'storeDonation'])->name('guest.donations.store');
+Route::post('/guest/donations', [DonationsController::class, 'storeDonation'])->name('guest.donations.store');
 
 Route::get('/dashboard', function () {
     if (Auth::check()) {

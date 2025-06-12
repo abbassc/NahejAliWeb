@@ -165,7 +165,7 @@
                   <td>{{ $volunteer->phone }}</td>
                   <td>{{ $volunteer->donations()->where('status', 'assigned')->count() }}</td>
                   <td>
-                    <a href="{{ route('admin.volunteers.index') }}" class="btn">Edit</a>
+                    <a href="{{ route('admin.volunteers.edit', $volunteer->user_id) }}" class="btn">Edit</a>
                     <form action="{{ route('admin.volunteers.delete', $volunteer->user_id) }}" method="POST"  style="display: inline; background: none; border: none; padding: 0; margin: 0;">
                       @csrf
                       @method('DELETE')

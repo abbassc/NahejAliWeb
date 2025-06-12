@@ -52,7 +52,7 @@
         <label>Preferred Time:</label>
         <input id="prefered_time" name="prefered_time" type="datetime-local" required>
 
-        <button type="submit" onclick="showDonationConfirmation()">Submit Donation</button>
+        <button type="submit" onclick="showDonationConfirmation(event)">Submit Donation</button>
       </form>
       
     </section>
@@ -63,11 +63,13 @@
 </body>
 
 <script>
-  function showDonationConfirmation() {  
+  function showDonationConfirmation(event) {  
+      event.preventDefault(); // Prevent default form submission
       let prefered_time = document.getElementById("prefered_time").value;
 
       if (prefered_time) {
           alert(`Donation added on ${prefered_time}!`);
+          event.target.form.submit(); // Submit the form after validation
       }
       else {
           alert("Please select all required values.");
